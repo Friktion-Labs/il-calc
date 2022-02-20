@@ -33,6 +33,8 @@ from dash import html
 
 
 app = JupyterDash(__name__)
+server = app.server
+
 app.layout = html.Div([
     html.H1("Impermanent Loss Calculator"),
     html.H5('Start Price', style={'display':'inline-block','margin-right':20}),
