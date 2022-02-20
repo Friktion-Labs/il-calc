@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[ ]:
 
 
 import pandas as pd
@@ -33,8 +33,6 @@ from dash import html
 
 
 app = JupyterDash(__name__)
-server = app.server
-
 app.layout = html.Div([
     html.H1("Impermanent Loss Calculator"),
     html.H5('Start Price', style={'display':'inline-block','margin-right':20}),
@@ -131,8 +129,8 @@ def update_figure2(start_price, pp_funding, delta_funding, lp_apr, days, checkli
 
     new_lp = lp * (1+lp_apr/365)**days
     
-    df["Spot Pair"] = start_price + new_price
-    df["LP Position"] = new_lp
+    df["Spot Pair"] = (start_price + new_price)/(start_price*2)
+    df["LP Position"] = new_lp/(start_price*2)
     # Janky and stupid I know
     if 'pp' in checklist and not 'dlp' in checklist and not 'dpp' in checklist:
         df["final_position"] = new_lp + power_perp_pnl + power_perp_funding_pnl
@@ -143,12 +141,14 @@ def update_figure2(start_price, pp_funding, delta_funding, lp_apr, days, checkli
     if 'dlp' in checklist and not 'pp' in checklist:
         df["final_position"] = new_lp + delta + delta_funding_pnl
 
+    df["final_position"] = df.final_position/(start_price*2)
+        
     fig = px.line(df)
     
     return fig.update_layout(
         title="Token1 vs. USDC",
         xaxis_title="Final Price",
-        yaxis_title="PNL per 1 LP Position",
+        yaxis_title="Percentage Ret",
     )
 
 # @app.callback(
@@ -171,8 +171,7 @@ def update_figure2(start_price, pp_funding, delta_funding, lp_apr, days, checkli
 #         }
 #     ]
 
-if __name__ == "__main__":
-    app.run_server()
+app.run_server(mode="inline")
 
 
 # In[ ]:
