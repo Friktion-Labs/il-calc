@@ -169,8 +169,8 @@ def update_figure2(start_price, pp_funding, delta_funding, lp_apr, days, checkli
 #         }
 #     ]
 
-app.run_server()
-
+if __name__ == "__main__":
+     app.run_server()
 
 # In[ ]:
 
