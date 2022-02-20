@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[1]:
 
 
 import pandas as pd
@@ -121,7 +121,7 @@ def update_figure2(start_price, pp_funding, delta_funding, lp_apr, days, checkli
     lp = start_price+new_price+il
     power_perp_pnl = (new_price**2-start_price**2)*power_perp_sizing
     delta = (start_price-new_price)
- 
+    op = 2*start_price
     
     power_perp_funding_pnl = -pp_funding/100*days*start_price**2*power_perp_sizing
     delta_funding_pnl = -delta_funding/100*days*start_price
@@ -129,8 +129,8 @@ def update_figure2(start_price, pp_funding, delta_funding, lp_apr, days, checkli
 
     new_lp = lp * (1+lp_apr/365)**days
     
-    df["Spot Pair"] = start_price + new_price
-    df["LP Position"] = new_lp
+    df["Spot Pair"] = ((start_price + new_price)/op-1)*100
+    df["LP Position"] = (new_lp/op-1)*100
     # Janky and stupid I know
     if 'pp' in checklist and not 'dlp' in checklist and not 'dpp' in checklist:
         df["final_position"] = new_lp + power_perp_pnl + power_perp_funding_pnl
@@ -141,6 +141,8 @@ def update_figure2(start_price, pp_funding, delta_funding, lp_apr, days, checkli
     if 'dlp' in checklist and not 'pp' in checklist:
         df["final_position"] = new_lp + delta + delta_funding_pnl
 
+    df["final_position"] = (df.final_position/op-1)*100
+        
     fig = px.line(df)
     
     return fig.update_layout(
@@ -170,7 +172,8 @@ def update_figure2(start_price, pp_funding, delta_funding, lp_apr, days, checkli
 #     ]
 
 if __name__ == "__main__":
-     app.run_server()
+    app.run_server()
+
 
 # In[ ]:
 
