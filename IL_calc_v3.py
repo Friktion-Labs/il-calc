@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[5]:
 
 
 import pandas as pd
@@ -129,8 +129,8 @@ def update_figure2(start_price, pp_funding, delta_funding, lp_apr, days, checkli
 
     new_lp = lp * (1+lp_apr/365)**days
     
-    df["Spot Pair"] = (start_price + new_price)/(start_price*2)
-    df["LP Position"] = new_lp/(start_price*2)
+    df["Spot Pair"] = ((start_price + new_price)/(start_price*2) -1)*100
+    df["LP Position"] = (new_lp/(start_price*2) -1)*100
     # Janky and stupid I know
     if 'pp' in checklist and not 'dlp' in checklist and not 'dpp' in checklist:
         df["final_position"] = new_lp + power_perp_pnl + power_perp_funding_pnl
@@ -141,7 +141,7 @@ def update_figure2(start_price, pp_funding, delta_funding, lp_apr, days, checkli
     if 'dlp' in checklist and not 'pp' in checklist:
         df["final_position"] = new_lp + delta + delta_funding_pnl
 
-    df["final_position"] = df.final_position/(start_price*2)
+    df["final_position"] = (df.final_position/(start_price*2) -1)*100
         
     fig = px.line(df)
     
@@ -171,7 +171,7 @@ def update_figure2(start_price, pp_funding, delta_funding, lp_apr, days, checkli
 #         }
 #     ]
 
-app.run_server(mode="inline")
+app.run_server(mode="external")
 
 
 # In[ ]:
