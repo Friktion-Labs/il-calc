@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[3]:
 
 
 import pandas as pd
@@ -33,6 +33,8 @@ from dash import html
 
 
 app = JupyterDash(__name__)
+server = app.server
+
 app.layout = html.Div([
     html.H1("Impermanent Loss Calculator"),
     html.H5('Start Price', style={'display':'inline-block','margin-right':20}),
@@ -149,27 +151,28 @@ def update_figure2(start_price, pp_funding, delta_funding, lp_apr, days, checkli
         yaxis_title="PNL per 1 LP Position",
     )
 
-@app.callback(
-    Output('yield_table', 'style_data_conditional'),
-    [
-        Input("start_price", "value"),
-        Input("pp_funding", "value"),
-        Input("delta_funding", "value"),
-        Input("lp_apr", "value"),
-        Input("hedges", "value"),
-    ]
-)
-def update_table(start_price, pp_funding, delta_funding, lp_apr, checklist):
-    return [
-        {
-            "LP Yield": 0.1, 
-            "Power Perp Funding": 0.1, 
-            "Delta Hedge Funding": 0.1, 
-            "Final APR": 0.1
-        }
-    ]
+# @app.callback(
+#     Output('yield_table', 'style_data_conditional'),
+#     [
+#         Input("start_price", "value"),
+#         Input("pp_funding", "value"),
+#         Input("delta_funding", "value"),
+#         Input("lp_apr", "value"),
+#         Input("hedges", "value"),
+#     ]
+# )
+# def update_table(start_price, pp_funding, delta_funding, lp_apr, checklist):
+#     return [
+#         {
+#             "LP Yield": 0.1, 
+#             "Power Perp Funding": 0.1, 
+#             "Delta Hedge Funding": 0.1, 
+#             "Final APR": 0.1
+#         }
+#     ]
 
-app.run_server(mode='external')
+if __name__ == "__main__":
+    app.run_server()
 
 
 # In[ ]:
