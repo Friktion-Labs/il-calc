@@ -135,22 +135,22 @@ def update_figure2(start_price, pp_funding, delta_funding, lp_apr, days, checkli
     df["LP Position"] = (new_lp/op-1)*100
     # Janky and stupid I know
     if 'pp' in checklist and not 'dlp' in checklist and not 'dpp' in checklist:
-        df["final_position"] = new_lp + power_perp_pnl + power_perp_funding_pnl
+        df["hedged_position"] = new_lp + power_perp_pnl + power_perp_funding_pnl
     if 'pp' in checklist and 'dlp' in checklist and 'dpp' not in checklist:
-        df["final_position"] = new_lp + power_perp_pnl + 0.5*delta + power_perp_funding_pnl + 0.5*delta_funding_pnl
+        df["hedged_position"] = new_lp + power_perp_pnl + 0.5*delta + power_perp_funding_pnl + 0.5*delta_funding_pnl
     if 'pp' in checklist and 'dlp' in checklist and 'dpp' in checklist:
-        df["final_position"] = new_lp + power_perp_pnl + 1.5*delta + power_perp_funding_pnl + 1.5*delta_funding_pnl
+        df["hedged_position"] = new_lp + power_perp_pnl + 1.5*delta + power_perp_funding_pnl + 1.5*delta_funding_pnl
     if 'dlp' in checklist and not 'pp' in checklist:
-        df["final_position"] = new_lp + delta + delta_funding_pnl
+        df["hedged_position"] = new_lp + delta + delta_funding_pnl
 
-    df["final_position"] = (df.final_position/op-1)*100
+    df["hedged_position"] = (df.final_position/op-1)*100
         
     fig = px.line(df)
     
     return fig.update_layout(
         title="Token1 vs. USDC",
         xaxis_title="Final Price",
-        yaxis_title="PNL per 1 LP Position",
+        yaxis_title="Return (pct)",
     )
 
 # @app.callback(
